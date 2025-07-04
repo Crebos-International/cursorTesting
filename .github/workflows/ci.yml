@@ -15,8 +15,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       
+    - name: List available Xcode versions
+      run: |
+        ls -la /Applications/ | grep Xcode
+        echo "Available Xcode versions:"
+        xcodebuild -version || echo "No default Xcode found"
+        
     - name: Select Xcode
-      run: sudo xcode-select -switch /Applications/Xcode.app
+      run: |
+        sudo xcode-select -switch /Applications/Xcode_15.1.app
+        xcodebuild -version
       
     - name: Setup Ruby
       uses: ruby/setup-ruby@v1
