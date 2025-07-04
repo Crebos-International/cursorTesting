@@ -33,12 +33,10 @@ jobs:
         
     - name: Build project
       run: |
-        cd CusrsorTesting
         xcodebuild -project CusrsorTesting.xcodeproj -scheme CusrsorTesting -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' build
         
     - name: Run tests
       run: |
-        cd CusrsorTesting
         xcodebuild -project CusrsorTesting.xcodeproj -scheme CusrsorTesting -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' test -resultBundlePath ./TestResults.xcresult
         
     - name: Generate test report
