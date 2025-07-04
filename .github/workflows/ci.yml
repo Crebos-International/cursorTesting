@@ -52,14 +52,21 @@ jobs:
     - name: Run tests
       run: |
         cd CusrsorTesting
-        xcodebuild -workspace CusrsorTesting.xcworkspace -scheme CusrsorTesting -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' test
+        xcodebuild -workspace CusrsorTesting.xcworkspace -scheme CusrsorTesting -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' test -resultBundlePath ./TestResults.xcresult
+        
+    - name: Generate test report
+      run: |
+        cd CusrsorTesting
+        xcrun xccov view --report TestResults.xcresult > test-report.txt
         
     - name: Upload test results
       uses: actions/upload-artifact@v4
       if: always()
       with:
         name: test-results
-        path: CusrsorTesting/build/reports/
+        path: |
+          CusrsorTesting/TestResults.xcresult
+          CusrsorTesting/test-report.txt
         
   # Code Quality Job
   code-quality:
