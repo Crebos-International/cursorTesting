@@ -158,7 +158,7 @@ platform :ios do
     match(
       type: "appstore",
       readonly: true,
-      app_identifier: ["com.yourcompany.CusrsorTesting"]
+      app_identifier: ["com.test.CusrsorTesting"]
     )
   end
 

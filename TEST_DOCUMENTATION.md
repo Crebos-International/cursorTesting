@@ -148,6 +148,13 @@ The CI/CD pipeline automatically runs tests:
   run: |
     cd CusrsorTesting
     xcodebuild -workspace CusrsorTesting.xcworkspace -scheme CusrsorTesting -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' test
+
+- name: Upload test results
+  uses: actions/upload-artifact@v4
+  if: always()
+  with:
+    name: test-results
+    path: CusrsorTesting/build/reports/
 ```
 
 ### Fastlane Integration
