@@ -1,0 +1,171 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Push a new beta build to TestFlight"
+  lane :beta do
+    # Ensure we're on the main branch
+    ensure_git_branch(branch: 'main')
+    
+    # Increment build number
+    increment_build_number(
+      build_number: latest_testflight_build_number + 1,
+      xcodeproj: "CusrsorTesting.xcodeproj"
+    )
+    
+    # Build the app
+    build_ios_app(
+      workspace: "CusrsorTesting.xcworkspace",
+      scheme: "CusrsorTesting",
+      export_method: "app-store",
+      export_options: {
+        method: "app-store",
+        provisioningProfiles: {
+          "com.yourcompany.CusrsorTesting" => "match AppStore com.yourcompany.CusrsorTesting"
+        }
+      },
+      output_directory: "builds",
+      output_name: "CusrsorTesting.ipa",
+      clean: true,
+      include_bitcode: false,
+      include_symbols: true
+    )
+    
+    # Upload to TestFlight
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true,
+      skip_submission: true,
+      reject_if_possible: true
+    )
+    
+    # Notify team on Slack (optional)
+    # slack(
+    #   message: "Successfully uploaded a new build to TestFlight",
+    #   slack_url: ENV["SLACK_URL"]
+    # )
+  end
+
+  desc "Push a new release build to the App Store"
+  lane :release do
+    # Ensure we're on the main branch
+    ensure_git_branch(branch: 'main')
+    
+    # Increment version number
+    increment_version_number(
+      version_number: prompt(
+        text: "What version number do you want to release?",
+        default: "1.0.0"
+      ),
+      xcodeproj: "CusrsorTesting.xcodeproj"
+    )
+    
+    # Increment build number
+    increment_build_number(
+      build_number: latest_testflight_build_number + 1,
+      xcodeproj: "CusrsorTesting.xcodeproj"
+    )
+    
+    # Build the app
+    build_ios_app(
+      workspace: "CusrsorTesting.xcworkspace",
+      scheme: "CusrsorTesting",
+      export_method: "app-store",
+      export_options: {
+        method: "app-store",
+        provisioningProfiles: {
+          "com.yourcompany.CusrsorTesting" => "match AppStore com.yourcompany.CusrsorTesting"
+        }
+      },
+      output_directory: "builds",
+      output_name: "CusrsorTesting.ipa",
+      clean: true,
+      include_bitcode: false,
+      include_symbols: true
+    )
+    
+    # Upload to App Store
+    upload_to_app_store(
+      force: true,
+      skip_metadata: false,
+      skip_screenshots: false,
+      submit_for_review: true,
+      automatic_release: true
+    )
+    
+    # Create git tag
+    add_git_tag
+    push_git_tags
+    
+    # Notify team on Slack (optional)
+    # slack(
+    #   message: "Successfully released a new version to the App Store",
+    #   slack_url: ENV["SLACK_URL"]
+    # )
+  end
+
+  desc "Run tests"
+  lane :test do
+    scan(
+      workspace: "CusrsorTesting.xcworkspace",
+      scheme: "CusrsorTesting",
+      devices: ["iPhone 15"],
+      clean: true,
+      output_directory: "test_output",
+      output_style: "raw"
+    )
+  end
+
+  desc "Build app for development"
+  lane :build_dev do
+    build_ios_app(
+      workspace: "CusrsorTesting.xcworkspace",
+      scheme: "CusrsorTesting",
+      export_method: "development",
+      export_options: {
+        method: "development",
+        provisioningProfiles: {
+          "com.yourcompany.CusrsorTesting" => "match Development com.yourcompany.CusrsorTesting"
+        }
+      },
+      output_directory: "builds",
+      output_name: "CusrsorTesting-Dev.ipa",
+      clean: true
+    )
+  end
+
+  desc "Setup code signing"
+  lane :setup_signing do
+    match(
+      type: "development",
+      readonly: true,
+      app_identifier: ["com.yourcompany.CusrsorTesting"]
+    )
+    
+    match(
+      type: "appstore",
+      readonly: true,
+      app_identifier: ["com.yourcompany.CusrsorTesting"]
+    )
+  end
+
+  desc "Clean build artifacts"
+  lane :clean do
+    clean_build_artifacts
+    sh "rm -rf builds/"
+    sh "rm -rf test_output/"
+  end
+end 

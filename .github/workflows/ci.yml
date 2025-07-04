@@ -1,0 +1,125 @@
+name: iOS CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  # Build and Test Job
+  build-and-test:
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Select Xcode
+      run: sudo xcode-select -switch /Applications/Xcode.app
+      
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.0'
+        bundler-cache: true
+        
+    - name: Install Fastlane
+      run: |
+        gem install bundler
+        bundle init
+        echo 'gem "fastlane"' >> Gemfile
+        bundle install
+        
+    - name: Cache CocoaPods
+      uses: actions/cache@v3
+      with:
+        path: ~/Library/Caches/CocoaPods
+        key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-pods-
+          
+    - name: Install CocoaPods dependencies
+      run: |
+        cd CusrsorTesting
+        pod install --repo-update
+        
+    - name: Build project
+      run: |
+        cd CusrsorTesting
+        xcodebuild -workspace CusrsorTesting.xcworkspace -scheme CusrsorTesting -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' build
+        
+    - name: Run tests
+      run: |
+        cd CusrsorTesting
+        xcodebuild -workspace CusrsorTesting.xcworkspace -scheme CusrsorTesting -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' test
+        
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: test-results
+        path: CusrsorTesting/build/reports/
+        
+  # Code Quality Job
+  code-quality:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: SwiftLint
+      uses: norio-nomura/action-swiftlint@v3
+      with:
+        args: --reporter github-actions-logging
+        
+    - name: Check for TODO comments
+      run: |
+        if grep -r "TODO\|FIXME\|HACK" CusrsorTesting/ --include="*.swift"; then
+          echo "Found TODO/FIXME/HACK comments in code"
+          exit 1
+        fi
+        
+  # Deploy to TestFlight (only on main branch)
+  deploy-testflight:
+    needs: [build-and-test, code-quality]
+    runs-on: macos-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.0'
+        bundler-cache: true
+        
+    - name: Install Fastlane
+      run: |
+        gem install bundler
+        bundle init
+        echo 'gem "fastlane"' >> Gemfile
+        bundle install
+        
+    - name: Setup App Store Connect API
+      env:
+        APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+        APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+        APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+      run: |
+        mkdir -p ~/.appstoreconnect/private_keys
+        echo "$APP_STORE_CONNECT_API_KEY" > ~/.appstoreconnect/private_keys/AuthKey_$APP_STORE_CONNECT_API_KEY_ID.p8
+        
+    - name: Deploy to TestFlight
+      env:
+        APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+        APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+        APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+        MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+        FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+      run: |
+        cd CusrsorTesting
+        fastlane beta 

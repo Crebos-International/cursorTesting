@@ -1,0 +1,38 @@
+{
+  "auth": {
+    "username": "YOUR_BROWSERSTACK_USERNAME",
+    "access_key": "YOUR_BROWSERSTACK_ACCESS_KEY"
+  },
+  "devices": [
+    {
+      "device": "iPhone 15",
+      "os": "iOS",
+      "os_version": "17"
+    },
+    {
+      "device": "iPhone 14",
+      "os": "iOS", 
+      "os_version": "16"
+    },
+    {
+      "device": "iPhone 13",
+      "os": "iOS",
+      "os_version": "15"
+    },
+    {
+      "device": "iPad Pro 12.9 2022",
+      "os": "iOS",
+      "os_version": "17"
+    }
+  ],
+  "app": "bs://YOUR_APP_ID",
+  "testSuite": "bs://YOUR_TEST_SUITE_ID",
+  "project": "CusrsorTesting iOS App",
+  "build": "Build 1.0",
+  "name": "iOS Test Run",
+  "debug": true,
+  "networkLogs": true,
+  "deviceLogs": true,
+  "video": true,
+  "local": false
+} 

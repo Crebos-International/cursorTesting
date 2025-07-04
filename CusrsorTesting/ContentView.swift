@@ -8,17 +8,23 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var authManager: AuthManager
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        Group {
+            if authManager.isAuthenticated {
+                HomeView()
+            } else {
+                AuthView()
+            }
         }
-        .padding()
+        .animation(.easeInOut, value: authManager.isAuthenticated)
     }
 }
 
 #Preview {
     ContentView()
+        .environmentObject(AuthManager())
+        .environmentObject(CartManager())
+        .environmentObject(FavoritesManager())
 }
