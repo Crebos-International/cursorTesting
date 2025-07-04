@@ -9,7 +9,7 @@ on:
 jobs:
   # Build and Test Job
   build-and-test:
-    runs-on: macos-latest
+    runs-on: macos-14
     
     steps:
     - name: Checkout code
@@ -76,7 +76,7 @@ jobs:
   # Deploy to TestFlight (only on main branch)
   deploy-testflight:
     needs: [build-and-test, code-quality]
-    runs-on: macos-latest
+    runs-on: macos-14
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     
     steps:
