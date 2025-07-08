@@ -35,7 +35,7 @@ platform :ios do
       export_options: {
         method: "app-store",
         provisioningProfiles: {
-          "com.yourcompany.CusrsorTesting" => "match AppStore com.yourcompany.CusrsorTesting"
+          "com.test.CusrsorTesting" => "match AppStore com.test.CusrsorTesting"
         }
       },
       output_directory: "builds",
@@ -87,7 +87,7 @@ platform :ios do
       export_options: {
         method: "app-store",
         provisioningProfiles: {
-          "com.yourcompany.CusrsorTesting" => "match AppStore com.yourcompany.CusrsorTesting"
+          "com.test.CusrsorTesting" => "match AppStore com.test.CusrsorTesting"
         }
       },
       output_directory: "builds",
@@ -138,7 +138,7 @@ platform :ios do
       export_options: {
         method: "development",
         provisioningProfiles: {
-          "com.yourcompany.CusrsorTesting" => "match Development com.yourcompany.CusrsorTesting"
+          "com.test.CusrsorTesting" => "match Development com.test.CusrsorTesting"
         }
       },
       output_directory: "builds",
@@ -152,7 +152,7 @@ platform :ios do
     match(
       type: "development",
       readonly: true,
-      app_identifier: ["com.yourcompany.CusrsorTesting"]
+      app_identifier: ["com.test.CusrsorTesting"]
     )
     
     match(
