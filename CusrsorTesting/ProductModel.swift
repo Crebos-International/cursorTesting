@@ -36,7 +36,6 @@ enum ProductCategory: String, CaseIterable, Codable {
 }
 
 enum Gender: String, CaseIterable, Codable {
-    case all = "All"
     case men = "Men"
     case women = "Women"
     case unisex = "Unisex"
