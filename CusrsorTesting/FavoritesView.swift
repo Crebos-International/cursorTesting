@@ -219,7 +219,6 @@ struct FavoriteProductCard: View {
                     }) {
                         Image(systemName: "cart.badge.plus")
                             .font(.caption)
-                            .fontWeight(.bold)
                             .foregroundColor(.white)
                             .padding(6)
                             .background(Color.blue)

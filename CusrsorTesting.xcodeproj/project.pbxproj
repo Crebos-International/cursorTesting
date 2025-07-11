@@ -6,8 +6,28 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		F2D77C152E20E28700997169 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D77C142E20E28700997169 /* XCTest.framework */; };
+		F2D77C162E20E28700997169 /* XCTest.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F2D77C142E20E28700997169 /* XCTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		F2D77C172E20E28700997169 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				F2D77C162E20E28700997169 /* XCTest.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		F2D4E3842E155A96003396C7 /* CusrsorTesting.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CusrsorTesting.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F2D77C142E20E28700997169 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -23,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2D77C152E20E28700997169 /* XCTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -33,6 +54,7 @@
 			isa = PBXGroup;
 			children = (
 				F2D4E3862E155A96003396C7 /* CusrsorTesting */,
+				F2D77C132E20E28700997169 /* Frameworks */,
 				F2D4E3852E155A96003396C7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -45,6 +67,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		F2D77C132E20E28700997169 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F2D77C142E20E28700997169 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -55,6 +85,7 @@
 				F2D4E3802E155A96003396C7 /* Sources */,
 				F2D4E3812E155A96003396C7 /* Frameworks */,
 				F2D4E3822E155A96003396C7 /* Resources */,
+				F2D77C172E20E28700997169 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

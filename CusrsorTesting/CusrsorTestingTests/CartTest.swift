@@ -1,7 +1,14 @@
+//
+//  CartTest.swift
+//  CusrsorTesting
+//
+//  Created by Himank Bansal on 11/07/25.
+//
+
 import XCTest
 @testable import CusrsorTesting
 
-class CartManagerTests: XCTestCase {
+final class CartTest: XCTestCase {
     var cartManager: CartManager!
     var sampleProduct: Product!
     
@@ -346,4 +353,4 @@ class CartManagerTests: XCTestCase {
         XCTAssertEqual(cartManager.getQuantity(for: product2), 3)
         XCTAssertEqual(cartManager.subtotal, 80.0) // (10 * 2) + (20 * 3)
     }
-} 
+}

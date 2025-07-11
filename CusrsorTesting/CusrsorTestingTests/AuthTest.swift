@@ -1,7 +1,14 @@
+//
+//  AuthTest.swift
+//  CusrsorTesting
+//
+//  Created by Himank Bansal on 11/07/25.
+//
+
 import XCTest
 @testable import CusrsorTesting
 
-class AuthManagerTests: XCTestCase {
+final class AuthTest: XCTestCase {
     var authManager: AuthManager!
     
     override func setUp() {
@@ -257,4 +264,4 @@ class AuthManagerTests: XCTestCase {
         }
         wait(for: [expectation], timeout: 2.0)
     }
-} 
+}

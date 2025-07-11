@@ -1,7 +1,13 @@
-import XCTest
-@testable import CusrsorTesting
+//
+//  FavTest.swift
+//  CusrsorTesting
+//
+//  Created by Himank Bansal on 11/07/25.
+//
 
-class FavoritesManagerTests: XCTestCase {
+import XCTest
+
+final class FavTest: XCTestCase {
     var favoritesManager: FavoritesManager!
     var sampleProduct: Product!
     
@@ -245,7 +251,7 @@ class FavoritesManagerTests: XCTestCase {
         // When
         let menFavorites = favoritesManager.getFavorites(for: .men)
         let womenFavorites = favoritesManager.getFavorites(for: .women)
-        let allFavorites = favoritesManager.getFavorites()
+        let allFavorites = favoritesManager.getFavorites(for: .all)
         
         // Then
         XCTAssertEqual(menFavorites.count, 1)
@@ -289,7 +295,7 @@ class FavoritesManagerTests: XCTestCase {
         // When
         let clothingFavorites = favoritesManager.getFavorites(for: .clothing)
         let shoesFavorites = favoritesManager.getFavorites(for: .shoes)
-        let allFavorites = favoritesManager.getFavorites()
+        let allFavorites = favoritesManager.getFavorites(for: .all)
         
         // Then
         XCTAssertEqual(clothingFavorites.count, 1)
@@ -377,4 +383,4 @@ class FavoritesManagerTests: XCTestCase {
         XCTAssertFalse(favoritesManager.isFavorite(product1))
         XCTAssertTrue(favoritesManager.isFavorite(product3))
     }
-} 
+}

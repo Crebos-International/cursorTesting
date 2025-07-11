@@ -95,7 +95,6 @@ struct ProductCard: View {
                     }) {
                         Image(systemName: "plus")
                             .font(.caption)
-                            .fontWeight(.bold)
                             .foregroundColor(.white)
                             .padding(6)
                             .background(Color.blue)
